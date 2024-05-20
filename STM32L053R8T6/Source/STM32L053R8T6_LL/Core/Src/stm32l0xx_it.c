@@ -149,7 +149,13 @@ void EXTI4_15_IRQHandler(void)
   /* USER CODE BEGIN EXTI4_15_IRQn 0 */
 
   /* USER CODE END EXTI4_15_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(BUTTON_BLUE_PC13_Pin);
+  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_13) != RESET)
+  {
+    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_13);
+    /* USER CODE BEGIN LL_EXTI_LINE_13 */
+    LL_GPIO_EXTI_Callback(BUTTON_BLUE_PC13_Pin);
+    /* USER CODE END LL_EXTI_LINE_13 */
+  }
   /* USER CODE BEGIN EXTI4_15_IRQn 1 */
 
   /* USER CODE END EXTI4_15_IRQn 1 */
@@ -161,7 +167,10 @@ void EXTI4_15_IRQHandler(void)
 void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
-
+  if(LL_TIM_IsActiveFlag_CC1(TIM2) == 1)
+  {
+	LL_TIM_ClearFlag_CC1(TIM2);
+  }
   /* USER CODE END TIM2_IRQn 0 */
   /* USER CODE BEGIN TIM2_IRQn 1 */
 

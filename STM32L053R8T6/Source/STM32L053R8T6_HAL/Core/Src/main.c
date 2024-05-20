@@ -109,7 +109,7 @@ int main(void)
   HAL_TIM_PWM_Start_IT(&htim2, TIM_CHANNEL_1);
   led_pwm_is_start = 1;
 
-  printf("STM32L053R8T6 Initialize!!\r\n\r\n");
+  printf("STM32L053R8T6 HAL Initialize!!\r\n\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -294,6 +294,29 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 	HAL_UART_Receive_IT(&huart2, &uart2_rx_data, 1);
   }
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin == BUTTON_BLUE_PC13_Pin)
+	{
+		if(HAL_GPIO_ReadPin(BUTTON_BLUE_PC13_GPIO_Port, BUTTON_BLUE_PC13_Pin) == GPIO_PIN_SET)
+		{
+			HAL_GPIO_WritePin(GPIO_OUTPUT_PC14_GPIO_Port, GPIO_OUTPUT_PC14_Pin, GPIO_PIN_RESET);
+			Put_String("Button Pull, GPIO_OUTPUT_PC14 RESET\r\n");
+		}
+		else
+		{
+			HAL_GPIO_WritePin(GPIO_OUTPUT_PC14_GPIO_Port, GPIO_OUTPUT_PC14_Pin, GPIO_PIN_SET);
+			Put_String("Button Push, GPIO_OUTPUT_PC14 SET\r\n");
+		}
+
+		Put_String("GPIO_OUTPUT_PC14 BSRR %ld\r\n", READ_BIT(GPIO_OUTPUT_PC14_GPIO_Port->BSRR, GPIO_OUTPUT_PC14_Pin) >> 14);
+		Put_String("GPIO_OUTPUT_PC14 BRR %ld\r\n", READ_BIT(GPIO_OUTPUT_PC14_GPIO_Port->BRR, GPIO_OUTPUT_PC14_Pin) >> 14);
+		Put_String("GPIO_OUTPUT_PC14 ODR %ld\r\n", READ_BIT(GPIO_OUTPUT_PC14_GPIO_Port->ODR, GPIO_OUTPUT_PC14_Pin) >> GPIO_ODR_OD14_Pos);
+		Put_String("GPIO_OUTPUT_PC14 IDR %ld\r\n", HAL_GPIO_ReadPin(GPIO_OUTPUT_PC14_GPIO_Port, GPIO_OUTPUT_PC14_Pin));
+		Put_String("GPIO_INPUT_PC15 IDR %ld\r\n", HAL_GPIO_ReadPin(GPIO_INPUT_PC15_GPIO_Port, GPIO_INPUT_PC15_Pin));
+	}
 }
 /* USER CODE END 4 */
 

@@ -306,6 +306,34 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	HAL_UART_Receive_IT(&huart2, &uart2_rx_data, 1);
   }
 }
+
+void LL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin == BUTTON_BLUE_PC13_Pin)
+	{
+		//if(HAL_GPIO_ReadPin(BUTTON_BLUE_PC13_GPIO_Port, BUTTON_BLUE_PC13_Pin) == GPIO_PIN_SET)
+		if(LL_GPIO_ReadInputPort(BUTTON_BLUE_PC13_GPIO_Port) & GPIO_IDR_ID13)
+		{
+			//HAL_GPIO_WritePin(GPIO_OUTPUT_PC14_GPIO_Port, GPIO_OUTPUT_PC14_Pin, GPIO_PIN_RESET);
+			LL_GPIO_ResetOutputPin(GPIO_OUTPUT_PC14_GPIO_Port, GPIO_OUTPUT_PC14_Pin);
+			Put_String("Button Pull, GPIO_OUTPUT_PC14 RESET\r\n");
+		}
+		else
+		{
+			//HAL_GPIO_WritePin(GPIO_OUTPUT_PC14_GPIO_Port, GPIO_OUTPUT_PC14_Pin, GPIO_PIN_SET);
+			LL_GPIO_SetOutputPin(GPIO_OUTPUT_PC14_GPIO_Port, GPIO_OUTPUT_PC14_Pin);
+			Put_String("Button Push, GPIO_OUTPUT_PC14 SET\r\n");
+		}
+
+		Put_String("GPIO_OUTPUT_PC14 BSRR %ld\r\n", READ_BIT(GPIO_OUTPUT_PC14_GPIO_Port->BSRR, GPIO_OUTPUT_PC14_Pin) >> 14);
+		Put_String("GPIO_OUTPUT_PC14 BRR %ld\r\n", READ_BIT(GPIO_OUTPUT_PC14_GPIO_Port->BRR, GPIO_OUTPUT_PC14_Pin) >> 14);
+		Put_String("GPIO_OUTPUT_PC14 ODR %ld\r\n", READ_BIT(LL_GPIO_ReadOutputPort(GPIO_OUTPUT_PC14_GPIO_Port), GPIO_ODR_OD14) >> GPIO_ODR_OD14_Pos);
+		//Put_String("GPIO_OUTPUT_PC14 IDR %ld\r\n", HAL_GPIO_ReadPin(GPIO_OUTPUT_PC14_GPIO_Port, GPIO_OUTPUT_PC14_Pin));
+		Put_String("GPIO_OUTPUT_PC14 IDR %ld\r\n", READ_BIT(LL_GPIO_ReadInputPort(GPIO_OUTPUT_PC14_GPIO_Port), GPIO_IDR_ID14) >> GPIO_IDR_ID14_Pos);
+		//Put_String("GPIO_INPUT_PC15 IDR %ld\r\n", HAL_GPIO_ReadPin(GPIO_INPUT_PC15_GPIO_Port, GPIO_INPUT_PC15_Pin));
+		Put_String("GPIO_INPUT_PC15 IDR %ld\r\n", (LL_GPIO_ReadInputPort(GPIO_INPUT_PC15_GPIO_Port) & GPIO_IDR_ID15) >> GPIO_IDR_ID15_Pos);
+	}
+}
 /* USER CODE END 4 */
 
 /**
