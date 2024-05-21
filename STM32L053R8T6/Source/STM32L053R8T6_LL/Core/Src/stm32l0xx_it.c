@@ -22,6 +22,7 @@
 #include "stm32l0xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "adc.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -159,6 +160,49 @@ void EXTI4_15_IRQHandler(void)
   /* USER CODE BEGIN EXTI4_15_IRQn 1 */
 
   /* USER CODE END EXTI4_15_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 channel 1 interrupt.
+  */
+void DMA1_Channel1_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+  if (LL_DMA_IsActiveFlag_TC1(DMA1) == 1)
+  {
+	LL_DMA_ClearFlag_TC1(DMA1);
+
+	ADC_DMA_TC_Callback();
+  }
+
+  if (LL_DMA_IsActiveFlag_TE1(DMA1) == 1)
+  {
+	  /* Clear flag DMA transfer error */
+	  LL_DMA_ClearFlag_TE1(DMA1);
+  }
+  /* USER CODE END DMA1_Channel1_IRQn 0 */
+
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles ADC, COMP1 and COMP2 interrupts (COMP interrupts through EXTI lines 21 and 22).
+  */
+void ADC1_COMP_IRQHandler(void)
+{
+  /* USER CODE BEGIN ADC1_COMP_IRQn 0 */
+  if(LL_ADC_IsActiveFlag_OVR(ADC1) != 0)
+  {
+	/* Clear flag ADC group regular overrun */
+	LL_ADC_ClearFlag_OVR(ADC1);
+  }
+  /* USER CODE END ADC1_COMP_IRQn 0 */
+
+  /* USER CODE BEGIN ADC1_COMP_IRQn 1 */
+
+  /* USER CODE END ADC1_COMP_IRQn 1 */
 }
 
 /**

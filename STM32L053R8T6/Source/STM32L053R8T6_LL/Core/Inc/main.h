@@ -29,6 +29,8 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l0xx_hal.h"
 
+#include "stm32l0xx_ll_adc.h"
+#include "stm32l0xx_ll_dma.h"
 #include "stm32l0xx_ll_tim.h"
 #include "stm32l0xx_ll_system.h"
 #include "stm32l0xx_ll_gpio.h"
@@ -38,7 +40,6 @@ extern "C" {
 #include "stm32l0xx_ll_rcc.h"
 #include "stm32l0xx_ll_utils.h"
 #include "stm32l0xx_ll_pwr.h"
-#include "stm32l0xx_ll_dma.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

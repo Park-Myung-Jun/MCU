@@ -18,6 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
+#include "dma.h"
 #include "tim.h"
 #include "usart.h"
 #include "usb_device.h"
@@ -99,10 +101,15 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_TIM2_Init();
   MX_USART2_UART_Init();
   MX_USB_DEVICE_Init();
+  MX_ADC_Init();
   /* USER CODE BEGIN 2 */
+  DMA_ADC_Initialize();
+  ADC_Initialize();
+
   HAL_UART_Receive_IT(&huart2, &uart2_rx_data, 1);
 
   //HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
@@ -332,6 +339,8 @@ void LL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		Put_String("GPIO_OUTPUT_PC14 IDR %ld\r\n", READ_BIT(LL_GPIO_ReadInputPort(GPIO_OUTPUT_PC14_GPIO_Port), GPIO_IDR_ID14) >> GPIO_IDR_ID14_Pos);
 		//Put_String("GPIO_INPUT_PC15 IDR %ld\r\n", HAL_GPIO_ReadPin(GPIO_INPUT_PC15_GPIO_Port, GPIO_INPUT_PC15_Pin));
 		Put_String("GPIO_INPUT_PC15 IDR %ld\r\n", (LL_GPIO_ReadInputPort(GPIO_INPUT_PC15_GPIO_Port) & GPIO_IDR_ID15) >> GPIO_IDR_ID15_Pos);
+
+		Put_String("ADC %d %d\r\n", ADC_Raw_Data[0], ADC_Raw_Data[1]);
 	}
 }
 /* USER CODE END 4 */
